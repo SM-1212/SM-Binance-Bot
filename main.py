@@ -1,19 +1,35 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, render_template, request, jsonify
 import os
 
 app = Flask(__name__)
 
+# 🔐 Load API Keys (from environment or .env)
+BINANCE_API_KEY = os.getenv("BINANCE_API_KEY")
+BINANCE_SECRET_KEY = os.getenv("BINANCE_SECRET_KEY")
+
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template("index.html")
 
-@app.route('/webhook', methods=['POST'])
-def webhook():
+@app.route('/get_sl_tsl', methods=['POST'])
+def get_sl_tsl():
     data = request.json
-    print("Received webhook data:", data)
-    return jsonify({"status": "received"})
+    symbol = data.get("symbol", "")
+    sl, tsl = get_sl_tsl_points(symbol)
+    return jsonify({"sl": sl, "tsl": tsl})
 
-# ✅ Correctly indented main block
-if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+# 📊 Professional SL/TSL on 15-min Timeframe
+def get_sl_tsl_points(symbol):
+    symbol = symbol.upper()
+    if symbol == "BTCUSDT":
+        return 400, 300
+    elif symbol == "ETHUSDT":
+        return 50, 35
+    elif symbol == "BNBUSDT":
+        return 10, 7
+    elif symbol == "SOLUSDT":
+        return 4, 3
+    return 0, 0
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=10000)
