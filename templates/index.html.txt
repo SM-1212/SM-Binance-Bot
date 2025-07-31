@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SM Trading Bot – Binance</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #fff3c4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        .header {
+            background-color: #ffc107;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #000;
+        }
+        .section {
+            margin-top: 20px;
+        }
+        .btn-group {
+            margin-top: 10px;
+        }
+        .live-section {
+            background-color: #e7e7e7;
+            padding: 15px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        .green-text { color: green; font-weight: bold; }
+        .red-text { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="header">SM Trading Bot – Binance</div>
+
+<div class="section">
+    <label>Binance API Key:</label>
+    <input type="text" class="form-control" id="apiKey" value="{{ creds.api_key }}">
+    <label>Secret Key:</label>
+    <input type="password" class="form-control" id="apiSecret" value="{{ creds.api_secret }}">
+    <button class="btn btn-secondary mt-2" onclick="saveCreds()">💾 Save API Credentials</button>
+</div>
+
+<div class="section">
+    <label>Symbol:</label>
+    <select class="form-control" id="symbol">
+        <option>BTCUSDT</option>
+        <option>ETHUSDT</option>
+        <option>SOLUSDT</option>
+        <option>BNBUSDT</option>
+    </select>
+
+    <label class="mt-2">Strategy Style:</label>
+    <select class="form-control" id="style" onchange="autoFillSLTSL()">
+        <option>Scalping</option>
+        <option>Intraday</option>
+        <option selected>Swing</option>
+    </select>
+
+    <label class="mt-2">SL (points):</label>
+    <input type="number" class="form-control" id="sl" value="150">
+    <label class="mt-2">TSL (points):</label>
+    <input type="number" class="form-control" id="tsl" value="100">
+
+    <label class="mt-2">Quantity:</label>
+    <input type="number" class="form-control" id="qty" value="0.01">
+
+    <div class="btn-group">
+        <button class="btn btn-primary" onclick="startBot()">▶️ Start Bot</button>
+        <button class="btn btn-danger" onclick="stopBot()">⏹ Stop Bot</button>
+        <button class="btn btn-warning" onclick="manualTrade()">🛒 Manual Trade</button>
+    </div>
+</div>
+
+<div class="live-section">
+    <div id="livePL" class="green-text">Live P&L: ₹0.00</div>
+    <div id="tradeLog" class="green-text">Trade Log: No trades yet</div>
+</div>
+
+<script>
+    function autoFillSLTSL() {
+        const style = document.getElementById('style').value;
+        const sl = document.getElementById('sl');
+        const tsl = document.getElementById('tsl');
+        if (style === "Scalping") { sl.value = 60; tsl.value = 40; }
+        else if (style === "Intraday") { sl.value = 100; tsl.value = 70; }
+        else if (style === "Swing") { sl.value = 150; tsl.value = 100; }
+    }
+    function saveCreds() { alert("API credentials saved (simulated)."); }
+    function startBot() { alert("Bot started."); }
+    function stopBot() { alert("Bot stopped."); }
+    function manualTrade() { alert("Manual trade placed."); }
+</script>
+
+</body>
+</html>
